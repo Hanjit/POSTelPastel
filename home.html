@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TelPastel POS System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .bg-orange-600 { background-color: #ea580c; }
+        .hover\:bg-orange-700:hover { background-color: #c2410c; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .p-6 { padding: 1.5rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .min-h-screen { min-height: 100vh; }
+        .bg-white { background-color: white; }
+        .p-8 { padding: 2rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .w-full { width: 100%; }
+        .max-w-4xl { max-width: 56rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .font-extrabold { font-weight: 800; }
+        .text-orange-600 { color: #ea580c; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .text-xl { font-size: 1.25rem; }
+        .font-semibold { font-weight: 600; }
+        .text-gray-700 { color: #374151; }
+        .mb-8 { margin-bottom: 2rem; }
+        .justify-between { justify-content: space-between; }
+        .mb-4 { margin-bottom: 1rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .border { border-width: 1px; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+        .focus\:ring-2:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+        .focus\:ring-orange-500:focus { --tw-ring-color: #f97316; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .gap-4 { gap: 1rem; }
+        .p-4 { padding: 1rem; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); }
+        .border-b { border-bottom-width: 1px; }
+        .pb-4 { padding-bottom: 1rem; }
+        .italic { font-style: italic; }
+        .mt-4 { margin-top: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .font-bold { font-weight: 700; }
+        .text-gray-800 { color: #1f2937; }
+        .mt-2 { margin-top: 0.5rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gap-6 { gap: 1.5rem; }
+        .bg-green-600 { background-color: #16a34a; }
+        .hover\:bg-green-700:hover { background-color: #15803d; }
+        .text-white { color: white; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-200 { transition-duration: 200ms; }
+        .ease-in-out { transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .bg-blue-600 { background-color: #2563eb; }
+        .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .bg-red-600 { background-color: #dc2626; }
+        .hover\:bg-red-700:hover { background-color: #b91c1c; }
+        .text-sm { font-size: 0.875rem; }
+        .leading-tight { line-height: 1.25; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .bg-orange-200 { background-color: #fed7aa; }
+        .hover\:bg-orange-300:hover { background-color: #fdba74; }
+        .text-orange-800 { color: #9a3412; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .bg-gray-900 { background-color: #111827; }
+        .bg-opacity-75 { background-color: rgba(17, 24, 39, 0.75); }
+        .z-50 { z-index: 50; }
+        .hidden { display: none; }
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .max-w-sm { max-width: 24rem; }
+        .font-medium { font-weight: 500; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .focus\:ring-green-500:focus { --tw-ring-color: #22c55e; }
+        .justify-end { justify-content: flex-end; }
+        .gap-2 { gap: 0.5rem; }
+        .bg-gray-300 { background-color: #d1d5db; }
+        .hover\:bg-gray-400:hover { background-color: #9ca3af; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-h { max-height: 400px; }
+        .overflow-y-auto { overflow-y: auto; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .border { border-width: 1px; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .text-gray-500 { color: #6b7280; }
+        .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .mt-4 { margin-top: 1rem; }
+        .text-center { text-align: center; }
+        .mt-6 { margin-top: 1.5rem; }
+
+        .report-modal {
+            overflow: scroll !important;
+            max-height: 80% !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6 flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl">
+        <div class="flex flex-col items-center mb-6">
+            <h1 class="text-4xl font-extrabold text-orange-600 mb-2">TelPastel</h1>
+            <p class="text-xl font-semibold text-gray-700">Point of Sale System</p>
+        </div>
+        
+        <!-- Cashier Selection Section -->
+        <div class="mb-8">
+            <label for="cashier-select" class="block text-xl font-semibold mb-2 text-gray-700">Select Cashier</label>
+            <select id="cashier-select" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option value="Audrey">Audrey</option>
+                <option value="Chris">Chris</option>
+                <option value="Kellen">Kellen</option>
+                <option value="Ming">Ming</option>
+                <option value="Renata">Renata</option>
+            </select>
+        </div>
+
+        <!-- Food Menu Section -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-700">Select Food</h2>
+            </div>
+            <div id="food-menu" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <!-- Food buttons will be created by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Shopping Cart Section -->
+        <div class="mb-8 p-4 bg-gray-50 rounded-lg shadow-inner">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Shopping Cart</h2>
+            <div id="cart-container" class="border-b border-gray-200 pb-4">
+                <p id="cart-message" class="text-gray-500 italic">Cart is empty. Select a food item to begin.</p>
+                <div id="cart-items"></div>
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+                <p class="text-lg font-bold text-gray-800">Total Items:</p>
+                <p id="total-items" class="text-lg font-bold text-gray-800">0</p>
+            </div>
+            <div class="mt-2 flex justify-between items-center">
+                <p class="text-2xl font-bold text-gray-800">Total:</p>
+                <p id="total-price" class="text-2xl font-bold text-orange-600">Rp 0</p>
+            </div>
+        </div>
+
+        <!-- Payment and Controls Section -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Payment Buttons -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Payment</h2>
+                <div class="flex gap-4">
+                    <button id="btn-cash" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                        Cash
+                    </button>
+                    <button id="btn-qris" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                        QRIS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Other Controls -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Controls</h2>
+                <div class="flex gap-4">
+                    <button id="btn-reset" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                        Reset Transaction
+                    </button>
+                    <button id="btn-report" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out shadow-md">
+                        Daily Report
+                    </button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button id="btn-save-report" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out shadow-md" onclick="saveExcel()">
+            Save Report
+        </button>
+    </div>
+
+    <!-- Modal for Cash Payment -->
+    <div id="cash-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-sm">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Cash Payment</h3>
+            <p class="text-lg text-gray-600 mb-4">Total Due: <span id="modal-total-price" class="font-bold text-orange-600">Rp 0</span></p>
+            <label for="cash-input" class="block text-gray-700 font-medium mb-2">Cash Received:</label>
+            <input type="number" id="cash-input" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-4" placeholder="Enter cash amount">
+            <div class="flex justify-end gap-2">
+                <button id="btn-cash-cancel" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200">Cancel</button>
+                <button id="btn-cash-pay" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">Pay</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Daily Report -->
+    <div id="report-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden ">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-4xl report-modal">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">Daily Sales Report</h3>
+            </div>
+            <div id="report-content" class="bg-gray-50 p-4 rounded-lg border border-gray-200 min-h-[100px] max-h-[400px] overflow-y-auto">
+                <!-- Report content will be generated by JavaScript -->
+                <p class="text-gray-500 italic">No sales today.</p>
+            </div>
+            <div class="flex justify-end mt-6">
+                <button id="btn-report-close" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Food menu data
+        const menuItems = {
+            "Ayam Pedas": 12000,
+            "Bakso Pedas": 10000,
+            "Ayam Woku": 12000,
+            "Beef Curry": 15000
+        };
+
+        // DOM elements
+        const cashierSelect = document.getElementById('cashier-select');
+        const menuContainer = document.getElementById('food-menu');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartMessage = document.getElementById('cart-message');
+        const totalItemsDisplay = document.getElementById('total-items');
+        const totalPriceDisplay = document.getElementById('total-price');
+        const btnCash = document.getElementById('btn-cash');
+        const btnQris = document.getElementById('btn-qris');
+        const btnReset = document.getElementById('btn-reset');
+        const btnReport = document.getElementById('btn-report');
+        const cashModal = document.getElementById('cash-modal');
+        const modalTotalPrice = document.getElementById('modal-total-price');
+        const cashInput = document.getElementById('cash-input');
+        const btnCashPay = document.getElementById('btn-cash-pay');
+        const btnCashCancel = document.getElementById('btn-cash-cancel');
+        const reportModal = document.getElementById('report-modal');
+        const reportContent = document.getElementById('report-content');
+        const btnReportClose = document.getElementById('btn-report-close');
+        const btnSaveReport = document.getElementById('btn-save-report');
+        
+        // Transaction data
+        let cart = {};
+        let dailySales = []; 
+        let totalDailyRevenue = 0;
+        let transactionNumber = 0;
+        let selectedCashier = cashierSelect.value;
+
+        // Function to format currency to Rupiah
+        const formatRupiah = (number) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        };
+
+        // Function to add an item to the cart
+        const addItemToCart = (item, price) => {
+            if (cart[item]) {
+                cart[item].quantity++;
+            } else {
+                cart[item] = { price, quantity: 1 };
+            }
+            updateCartDisplay();
+        };
+
+        // Function to update the cart display
+        const updateCartDisplay = () => {
+            cartItemsContainer.innerHTML = '';
+            let currentTotalPrice = 0;
+            let totalItems = 0;
+            
+            if (Object.keys(cart).length === 0) {
+                cartMessage.classList.remove('hidden');
+            } else {
+                cartMessage.classList.add('hidden');
+                for (const item in cart) {
+                    const subtotal = cart[item].price * cart[item].quantity;
+                    currentTotalPrice += subtotal;
+                    totalItems += cart[item].quantity;
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'py-2', 'border-b', 'border-gray-200');
+                    itemElement.innerHTML = `
+                        <div class="font-medium text-gray-700">${item} (${cart[item].quantity}x)</div>
+                        <div class="text-gray-900">${formatRupiah(subtotal)}</div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                }
+            }
+            totalItemsDisplay.textContent = totalItems;
+            totalPriceDisplay.textContent = formatRupiah(currentTotalPrice);
+        };
+
+        // Function to show the cash payment modal
+        const showCashModal = () => {
+            if (Object.keys(cart).length === 0) {
+                alertCustom("Warning", "The shopping cart is empty!");
+                return;
+            }
+            const currentTotalPrice = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            modalTotalPrice.textContent = formatRupiah(currentTotalPrice);
+            cashInput.value = '';
+            cashModal.classList.remove('hidden');
+        };
+
+        // Function to process cash payment
+        const processCashPayment = () => {
+            const currentTotalPrice = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const cashReceived = parseInt(cashInput.value);
+
+            if (isNaN(cashReceived) || cashReceived < currentTotalPrice) {
+                alertCustom("Error", "Invalid or insufficient cash amount.");
+                return;
+            }
+
+            const change = cashReceived - currentTotalPrice;
+            alertCustom("Payment Successful", `Change: ${formatRupiah(change)}`);
+            recordSale("Cash", currentTotalPrice, cashReceived, change);
+            cashModal.classList.add('hidden');
+        };
+
+        // Function to process QRIS payment
+        const processQrisPayment = () => {
+            if (Object.keys(cart).length === 0) {
+                alertCustom("Warning", "The shopping cart is empty!");
+                return;
+            }
+            const currentTotalPrice = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alertCustom("Payment Successful", `Payment of ${formatRupiah(currentTotalPrice)} has been processed via QRIS.`);
+            recordSale("QRIS", currentTotalPrice, null, null);
+        };
+
+        // Function to record a sale and reset the cart
+        const recordSale = (paymentMethod, totalAmount, cashReceived, change) => {
+            transactionNumber++;
+            const newSale = {
+                id: transactionNumber,
+                cashier: selectedCashier,
+                items: JSON.parse(JSON.stringify(cart)), 
+                total: totalAmount,
+                paymentMethod: paymentMethod,
+                cashReceived: cashReceived,
+                change: change,
+                timestamp: new Date().toLocaleString()
+            };
+            dailySales.push(newSale);
+            totalDailyRevenue += totalAmount;
+            resetTransaction();
+        };
+
+        // Function to reset the transaction
+        const resetTransaction = () => {
+            cart = {};
+            updateCartDisplay();
+        };
+        
+        // Function to delete a transaction
+        const deleteTransaction = (id) => {
+            const index = dailySales.findIndex(sale => sale.id === id);
+            if (index > -1) {
+                const deletedSale = dailySales[index];
+                totalDailyRevenue -= deletedSale.total;
+                dailySales.splice(index, 1);
+                showDailyReport(); // Re-render the report
+                alertCustom("Success", `Transaction #${id} has been deleted.`);
+            }
+        };
+
+        // Function to show the daily report
+        const showDailyReport = () => {
+            reportContent.innerHTML = '';
+
+            if (dailySales.length === 0) {
+                reportContent.innerHTML = '<p class="text-gray-500 italic">No sales today.</p>';
+            } else {
+                dailySales.forEach((sale) => {
+                    const transactionCard = document.createElement('div');
+                    transactionCard.className = 'bg-white p-4 rounded-lg shadow mb-4';
+                    
+                    let itemsList = '';
+                    for (const item in sale.items) {
+                        const subtotal = sale.items[item].price * sale.items[item].quantity;
+                        itemsList += `<p class="text-sm">- ${item} (${sale.items[item].quantity}x) - ${formatRupiah(subtotal)}</p>`;
+                    }
+
+                    let paymentDetails = '';
+                    if (sale.paymentMethod === 'Cash') {
+                        paymentDetails = `<p class="text-sm">Cash Received: ${formatRupiah(sale.cashReceived)}</p>
+                                          <p class="text-sm">Change: ${formatRupiah(sale.change)}</p>`;
+                    }
+
+                    transactionCard.innerHTML = `
+                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
+                            <h4 class="font-bold text-gray-800">Transaction #${sale.id}</h4>
+                            <span class="text-sm text-gray-500">${sale.timestamp}</span>
+                        </div>
+                        <div class="mb-2">
+                            <p class="font-semibold text-gray-700">Cashier: ${sale.cashier}</p>
+                            <p class="font-semibold text-gray-700">Items:</p>
+                            ${itemsList}
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-base font-semibold text-gray-700">Total: ${formatRupiah(sale.total)}</p>
+                            <p class="text-base font-semibold text-gray-700">Payment: <span class="text-orange-600">${sale.paymentMethod}</span></p>
+                        </div>
+                        ${paymentDetails}
+                        <button class="w-full mt-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 ease-in-out" onclick="deleteTransaction(${sale.id})">Delete Transaction</button>
+                    `;
+                    reportContent.appendChild(transactionCard);
+                });
+
+                const totalRevenueCard = document.createElement('div');
+                totalRevenueCard.className = 'bg-white p-4 rounded-lg shadow mt-4 text-center';
+                totalRevenueCard.innerHTML = `<p class="font-bold text-lg text-gray-700">Total Daily Revenue:</p>
+                                             <p class="text-2xl font-bold text-orange-600">${formatRupiah(totalDailyRevenue)}</p>`;
+                reportContent.appendChild(totalRevenueCard);
+            }
+            reportModal.classList.remove('hidden');
+        };
+
+        // Function to create a custom alert modal
+        const alertCustom = (title, message) => {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[60]';
+            modal.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-sm">
+                    <h3 class="text-xl font-bold mb-4">${title}</h3>
+                    <p class="text-gray-700">${message}</p>
+                    <div class="flex justify-end mt-4">
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200" onclick="this.closest('.fixed').remove()">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        };
+
+        // --- Application Initialization ---
+        
+        // Create food menu buttons
+        for (const item in menuItems) {
+            const btn = document.createElement('button');
+            btn.textContent = `${item} \n${formatRupiah(menuItems[item])}`;
+            btn.classList.add('bg-orange-200', 'hover:bg-orange-300', 'text-orange-800', 'font-semibold', 'py-4', 'px-2', 'rounded-lg', 'transition', 'duration-200', 'text-sm', 'leading-tight', 'shadow-sm');
+            btn.onclick = () => addItemToCart(item, menuItems[item]);
+            menuContainer.appendChild(btn);
+        }
+
+        // Event Listeners
+        cashierSelect.addEventListener('change', (event) => {
+            selectedCashier = event.target.value;
+        });
+
+        btnCash.addEventListener('click', showCashModal);
+        btnQris.addEventListener('click', processQrisPayment);
+        btnReset.addEventListener('click', resetTransaction);
+        btnReport.addEventListener('click', showDailyReport);
+        btnCashPay.addEventListener('click', processCashPayment);
+        btnCashCancel.addEventListener('click', () => cashModal.classList.add('hidden'));
+        btnReportClose.addEventListener('click', () => reportModal.classList.add('hidden'));
+
+        // Update initial display
+        updateCartDisplay();
+
+        function saveExcel() {
+            if (dailySales.length === 0) {
+                alertCustom("Warning", "No sales data to export!");
+                return;
+            }
+
+            let data = [];
+            data.push(["Transaction ID", "Cashier", "Items", "quantity", "amount", "Total", "Grand Total", "Payment Method", "Cash Received", "Change", "Timestamp"]);
+
+            let merges = [];
+            let currentRow = 1;
+            let grandTotals = [];
+
+            dailySales.forEach(sale => {
+                const itemEntries = Object.entries(sale.items);
+                const rowStart = currentRow + 1;
+                // const rowEnd = rowStart + itemEntries.length - 1;
+
+                itemEntries.forEach(([itemName, info]) => {
+                    data.push([
+                        sale.id,
+                        sale.cashier,
+                        itemName,
+                        info.quantity,
+                        info.price,
+                        info.price * info.quantity,
+                        sale.total,
+                        sale.paymentMethod,
+                        sale.cashReceived ?? "0",
+                        sale.change ?? "0",
+                        sale.timestamp
+                    ]);
+                    currentRow++;
+                });
+
+                const rowEnd = currentRow;
+                grandTotals.push(sale.total);
+
+                if (itemEntries.length > 1) {
+                    const mergeCols = [0, 1, 6, 7, 8, 9, 10];
+                    mergeCols.forEach(col => {
+                        merges.push({
+                            s: { r: rowStart - 1, c: col },
+                            e: { r: rowEnd - 1, c: col }
+                        });
+                    });
+                }
+
+                // if (itemEntries.length > 1) {
+                // merges.push({ s: { r: rowStart, c: 0 }, e: { r: rowEnd, c: 0 } });
+                // merges.push({ s: { r: rowStart, c: 1 }, e: { r: rowEnd, c: 1 } });
+                // merges.push({ s: { r: rowStart, c: 6 }, e: { r: rowEnd, c: 6 } });
+                // merges.push({ s: { r: rowStart, c: 7 }, e: { r: rowEnd, c: 7 } });
+                // merges.push({ s: { r: rowStart, c: 8 }, e: { r: rowEnd, c: 8 } });
+                // merges.push({ s: { r: rowStart, c: 9 }, e: { r: rowEnd, c: 9 } });
+                // merges.push({ s: { r: rowStart, c: 10 }, e: { r: rowEnd, c: 10 } });
+                // }
+            });
+
+            // Summary
+            // data.push([]);
+            data.push(["", "", "", "", "", "TOTAL SALES", grandTotals.reduce((a, b) => a + b, 0)]);
+
+            const worksheet = XLSX.utils.aoa_to_sheet(data);
+            worksheet['!merges'] = merges;
+
+            const colWidths = data[0].map((col, i) =>
+                ({ wch: Math.max(...data.map(r => (r[i] ? r[i].toString().length : 0))) + 2 })
+            );
+            worksheet['!cols'] = colWidths;
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Daily Sales");
+
+            XLSX.writeFile(workbook, "Daily_Sales_Report.xlsx");
+        }
+    </script>
+</body>
+</html>
